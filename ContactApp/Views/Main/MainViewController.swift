@@ -12,50 +12,70 @@ class MainViewController: UIViewController {
     
     let cellId = "MainViewControllerCell"
     
-
-    @IBOutlet weak var collectionView: UICollectionView!
+    var contacts = [Contact]()
+    
+    @IBOutlet weak var tableView: UITableView!
     {
-        didSet{
-            collectionView.delegate = self
-            collectionView.dataSource = self
+        didSet {
+            tableView.delegate = self
+            tableView.dataSource = self
             
-            collectionView.register(UINib(nibName: String(describing: MainViewControllerCell.self), bundle: Bundle(for: MainViewControllerCell.self)), forCellWithReuseIdentifier: cellId)
-            
-            let layout = UICollectionViewFlowLayout()
-            layout.minimumLineSpacing = 5
-            layout.minimumInteritemSpacing = 5
-            layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            layout.scrollDirection = .vertical
-            collectionView.collectionViewLayout = layout
+            tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
+            tableView.register(UINib(nibName: String(describing: MainViewControllerCell.self),
+                                     bundle: Bundle(for: MainViewControllerCell.self)),
+                               forCellReuseIdentifier: cellId)
         }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+
+        if let path = Bundle.main.path(forResource: "data", ofType: "json") {
+            do {
+                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+                if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [[String:Any]]
+                {
+                    for j in json {
+                        let user = Contact()
+                        
+                        user.phone = j["phone"] as? String
+                        user.contactId = j["id"] as? String
+                        user.firstname = j["firstName"] as? String
+                        user.lastname = j["lastName"] as? String
+                        user.email = j["email"] as? String
+                        
+                        self.contacts.append(user)
+                    }
+                }
+                self.tableView.reloadData()
+            } catch {
+                // handle error
+            }
+        }
     }
-
-
-//    @IBAction func addButtonTapped(_ sender: Any) {
-//        
-//        print("Add")
-//    }
 }
 
-extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+extension MainViewController: UITableViewDelegate, UITableViewDataSource
+{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.contacts.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MainViewControllerCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MainViewControllerCell
+        let user = self.contacts[indexPath.row]
+        if let firstname = user.firstname, let lastname = user.lastname {
+            cell.profileNameLabel.text = "\(firstname) \(lastname)"
+        }
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.bounds.width, height: 80)
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
     }
     
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "profileViewController") as! ProfileViewController
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
     
 }

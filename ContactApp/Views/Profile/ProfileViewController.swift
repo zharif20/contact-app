@@ -11,31 +11,29 @@ import UIKit
 class ProfileViewController: UIViewController {
 
     let cellId = "ProfileViewControllerCell"
+    let cellIconId = "ProfileIconCell"
+
     
-    @IBOutlet weak var profileIconView: UIView!
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var tableView: UITableView!
     {
         didSet {
-            collectionView.delegate = self
-            collectionView.dataSource = self
+            tableView.delegate = self
+            tableView.dataSource = self
             
-            collectionView.register(UINib(nibName: String(describing: ProfileViewControllerCell.self),
-                                          bundle: Bundle(for: ProfileViewControllerCell.self)),
-                                    forCellWithReuseIdentifier: cellId)
+            tableView.register(UINib(nibName: String(describing: ProfileViewControllerCell.self),
+                                     bundle: Bundle(for: ProfileViewControllerCell.self)),
+                               forCellReuseIdentifier: cellId)
+            tableView.register(UINib(nibName: String(describing: ProfileIconCell.self),
+                                     bundle: Bundle(for: ProfileIconCell.self)),
+                               forCellReuseIdentifier: cellIconId)
             
-            let layout = UICollectionViewFlowLayout()
-            layout.minimumLineSpacing = 5
-            layout.minimumInteritemSpacing = 5
-            layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            layout.scrollDirection = .vertical
-            collectionView.collectionViewLayout = layout
+            tableView.tableFooterView = UIView()
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.profileIconView.layer.cornerRadius = self.profileIconView.frame.size.width/2
 
     }
 
@@ -47,18 +45,50 @@ class ProfileViewController: UIViewController {
     }
 }
 
-extension ProfileViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4
+extension ProfileViewController: UITableViewDelegate, UITableViewDataSource
+{
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 3
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ProfileViewControllerCell
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {
+            return 1
+        }
+        return 2
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.section == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellIconId, for: indexPath) as! ProfileIconCell
+            return cell
+        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! ProfileViewControllerCell
         return cell
-        
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.bounds.size.width, height: 50)
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0 {
+            return 150
+        }
+        return 44
     }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "Section \(section)"
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        let headerHeight: CGFloat
+        
+        switch section {
+        case 0:
+            headerHeight = 0
+        default:
+            headerHeight = UITableView.automaticDimension
+        }
+        return headerHeight
+    }
+    
+    
 }

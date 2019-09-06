@@ -1,5 +1,5 @@
 //
-//  MainViewControllerCell.swift
+//  ProfileIconCell.swift
 //  ContactApp
 //
 //  Created by M. Zharif Hadi M. Khairuddin on 05/09/2019.
@@ -8,11 +8,9 @@
 
 import UIKit
 
-class MainViewControllerCell: UITableViewCell {
+class ProfileIconCell: UITableViewCell {
 
     @IBOutlet weak var profileIconView: UIView!
-    @IBOutlet weak var profileNameLabel: UILabel!
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
