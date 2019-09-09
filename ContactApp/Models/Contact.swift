@@ -8,11 +8,11 @@
 
 import Foundation
 
-class Contact {
+class Contact: Codable {
     var email: String? = ""
-    var firstname: String? = ""
-    var contactId: String? = ""
-    var lastname: String? = ""
+    var firstName: String? = ""
+    var id: String? = ""
+    var lastName: String? = ""
     var phone: String? = ""
     
     

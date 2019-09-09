@@ -25,7 +25,11 @@
 		5837D00F231FE83200314C5C /* ContactAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5837D00E231FE83200314C5C /* ContactAppUITests.swift */; };
 		5837D020231FFEEA00314C5C /* data.json in Resources */ = {isa = PBXBuildFile; fileRef = 5837D01F231FFEEA00314C5C /* data.json */; };
 		5837D022231FFF9B00314C5C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5837D021231FFF9B00314C5C /* Default-568h@2x.png */; };
-		58737A96232009CB0076AFC8 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58737A95232009CB0076AFC8 /* MainViewController.swift */; };
+		5849C42A23255A6B00CFFCDA /* ContactListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5849C42923255A6B00CFFCDA /* ContactListViewController.swift */; };
+		5849C42C23256AE700CFFCDA /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5849C42B23256AE700CFFCDA /* Constant.swift */; };
+		5849C43023256C4200CFFCDA /* ProfileFormVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5849C42F23256C4200CFFCDA /* ProfileFormVM.swift */; };
+		5849C43223256E2200CFFCDA /* ContactListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5849C43123256E2100CFFCDA /* ContactListVM.swift */; };
+		5849C43423257F1200CFFCDA /* ProfileForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5849C43323257F1200CFFCDA /* ProfileForm.swift */; };
 		58737AA023200E7A0076AFC8 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58737A9E23200E7A0076AFC8 /* ProfileViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -71,7 +75,11 @@
 		5837D010231FE83200314C5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5837D01F231FFEEA00314C5C /* data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = data.json; sourceTree = "<group>"; };
 		5837D021231FFF9B00314C5C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		58737A95232009CB0076AFC8 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		5849C42923255A6B00CFFCDA /* ContactListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactListViewController.swift; sourceTree = "<group>"; };
+		5849C42B23256AE700CFFCDA /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
+		5849C42F23256C4200CFFCDA /* ProfileFormVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileFormVM.swift; sourceTree = "<group>"; };
+		5849C43123256E2100CFFCDA /* ContactListVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactListVM.swift; sourceTree = "<group>"; };
+		5849C43323257F1200CFFCDA /* ProfileForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileForm.swift; sourceTree = "<group>"; };
 		58737A9E23200E7A0076AFC8 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		5D6D07884D3D608498147901 /* Pods-ContactApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactApp.debug.xcconfig"; path = "Target Support Files/Pods-ContactApp/Pods-ContactApp.debug.xcconfig"; sourceTree = "<group>"; };
 		933A27EC8D0DFAD8FDCC90E9 /* Pods-ContactApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactApp.release.xcconfig"; path = "Target Support Files/Pods-ContactApp/Pods-ContactApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -187,6 +195,7 @@
 		5837D01D231FFEA300314C5C /* Supporting files */ = {
 			isa = PBXGroup;
 			children = (
+				5849C42B23256AE700CFFCDA /* Constant.swift */,
 				5837CFFA231FE83200314C5C /* Info.plist */,
 				5837D01F231FFEEA00314C5C /* data.json */,
 				5837CFF5231FE83200314C5C /* Assets.xcassets */,
@@ -206,6 +215,9 @@
 		5837D0232320004D00314C5C /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				5849C43123256E2100CFFCDA /* ContactListVM.swift */,
+				5849C42F23256C4200CFFCDA /* ProfileFormVM.swift */,
+				5849C43323257F1200CFFCDA /* ProfileForm.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -214,18 +226,18 @@
 			isa = PBXGroup;
 			children = (
 				58737A9D23200E380076AFC8 /* Profile */,
-				58737A9723200A1B0076AFC8 /* Main */,
+				58737A9723200A1B0076AFC8 /* ContactList */,
 			);
 			path = Views;
 			sourceTree = "<group>";
 		};
-		58737A9723200A1B0076AFC8 /* Main */ = {
+		58737A9723200A1B0076AFC8 /* ContactList */ = {
 			isa = PBXGroup;
 			children = (
-				58737A95232009CB0076AFC8 /* MainViewController.swift */,
+				5849C42923255A6B00CFFCDA /* ContactListViewController.swift */,
 				58737A9823200A240076AFC8 /* Cell */,
 			);
-			path = Main;
+			path = ContactList;
 			sourceTree = "<group>";
 		};
 		58737A9823200A240076AFC8 /* Cell */ = {
@@ -476,12 +488,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				5827C30823215C1B00B3949B /* ProfileIconCell.swift in Sources */,
-				58737A96232009CB0076AFC8 /* MainViewController.swift in Sources */,
 				5827C30023214B8D00B3949B /* MainViewControllerCell.swift in Sources */,
+				5849C42C23256AE700CFFCDA /* Constant.swift in Sources */,
+				5849C43423257F1200CFFCDA /* ProfileForm.swift in Sources */,
 				58737AA023200E7A0076AFC8 /* ProfileViewController.swift in Sources */,
+				5849C43223256E2200CFFCDA /* ContactListVM.swift in Sources */,
 				5827C30423214E2B00B3949B /* ProfileViewControllerCell.swift in Sources */,
 				5837CFEF231FE83100314C5C /* AppDelegate.swift in Sources */,
 				5827C30B2321634800B3949B /* Contact.swift in Sources */,
+				5849C43023256C4200CFFCDA /* ProfileFormVM.swift in Sources */,
+				5849C42A23255A6B00CFFCDA /* ContactListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

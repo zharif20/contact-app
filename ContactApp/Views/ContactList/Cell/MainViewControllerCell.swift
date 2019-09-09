@@ -18,11 +18,22 @@ class MainViewControllerCell: UITableViewCell {
         // Initialization code
         self.profileIconView.layer.cornerRadius = self.profileIconView.frame.size.width/2
     }
+    
+    func setContact(user: Contact) {
+        if let firstname = user.firstName, let lastname = user.lastName {
+            self.profileNameLabel.text = "\(firstname) \(lastname)"
+        }
+    }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        
     }
     
 }
