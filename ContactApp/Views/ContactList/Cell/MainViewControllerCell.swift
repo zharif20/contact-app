@@ -13,6 +13,14 @@ class MainViewControllerCell: UITableViewCell {
     @IBOutlet weak var profileIconView: UIView!
     @IBOutlet weak var profileNameLabel: UILabel!
     
+    static var nib:UINib {
+        return UINib(nibName: identifier, bundle: nil)
+    }
+    
+    static var identifier: String {
+        return String(describing: self)
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

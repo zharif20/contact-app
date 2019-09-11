@@ -11,6 +11,22 @@ import UIKit
 class ProfileIconCell: UITableViewCell {
 
     @IBOutlet weak var profileIconView: UIView!
+    
+    var item: ProfileItem?
+    {
+        didSet {
+            guard let item = item as? ProfileViewModelPicture else { return }
+        }
+    }
+       
+    static var nib:UINib {
+        return UINib(nibName: identifier, bundle: nil)
+    }
+    
+    static var identifier: String {
+        return String(describing: self)
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
