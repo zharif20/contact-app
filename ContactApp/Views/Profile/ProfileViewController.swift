@@ -10,7 +10,7 @@ import UIKit
 
 class ProfileViewController: UIViewController {
 
-    var user = Contact()
+    var user: Contact?
     var contacts = [Contact]()
     
     fileprivate var viewModel: ProfileViewModel?
@@ -34,22 +34,20 @@ class ProfileViewController: UIViewController {
     }
 
     @IBAction func saveButtonTapped(_ sender: Any) {
-        var newContacts = [Contact]()
-
-        for contact in self.contacts {
-            if (user.id == contact.id) {
-                if let value = self.viewModel?.isValid().1 {
-                    contact.firstName = value[0]
-                    contact.lastName = value[1]
-                    contact.email = value[2]
-                    contact.phone = value[3]
-                }
+        viewModel?.saveNewData(contacts: self.contacts, callback: { (isSuccess) in
+            if isSuccess {
+                self.navigationController?.popViewController(animated: true)
+            } else {
+                let alert = UIAlertController(title: "Missing field",
+                                              message: "Please Enter first name and last name",
+                                              preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK",
+                                             style: .default,
+                                             handler: nil)
+                alert.addAction(okAction)
+                self.present(alert, animated: false, completion: nil)
             }
-            newContacts.append(contact)
-        }
-        
-        self.viewModel?.writeToFile(encodeFile: newContacts)
-        self.navigationController?.popViewController(animated: true)
+        })
     }
     
     @IBAction func cancelButtonTapped(_ sender: Any) {

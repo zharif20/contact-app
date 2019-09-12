@@ -60,7 +60,6 @@ extension ProfileViewControllerCell: UITextFieldDelegate {
         } else {
             textField.resignFirstResponder()
         }
-        
         return false
     }
 }

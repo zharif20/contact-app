@@ -23,20 +23,31 @@ protocol ContactItem {
 class ContactListViewModel: NSObject {
     
     var items = [ContactItem]()
-
+    var contactVC: ContactListViewController?
+    
+    fileprivate var contactList = ContactListVM()
+    
     override init() {
         super.init()
-        
-//        let contactsInfo = ContactViewModelInfo(contacts: )
-        
-        self.items = []
+        self.contactList = ContactListVM()
+        self.contactList.getData()
+        let contactsInfo = ContactViewModelInfo(contacts: self.contactList.contacts)
+        self.items = [contactsInfo]
+    }
+    
+    func refreshData(callback: (Bool) -> Void) {
+        self.contactList.getData()
+        if !self.contactList.contacts.isEmpty {
+            callback(true)
+        }
+        callback(false)
     }
 }
 
 extension ContactListViewModel: UITableViewDataSource
 {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.items.count
+        return self.items[section].rowCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -44,9 +55,10 @@ extension ContactListViewModel: UITableViewDataSource
         
         switch item.type {
         case .info:
-            if let cell = tableView.dequeueReusableCell(withIdentifier: MainViewControllerCell.identifier,
-                                                        for: indexPath) as? MainViewControllerCell
+            if let item = item as? ContactViewModelInfo, let cell = tableView.dequeueReusableCell(withIdentifier: MainViewControllerCell.identifier, for: indexPath) as? MainViewControllerCell
             {
+                let contact = item.contacts[indexPath.row]
+                cell.item = contact
                 return cell
             }
         }
@@ -55,9 +67,9 @@ extension ContactListViewModel: UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: Constant.ProfileViewControllerId) as! ProfileViewController
-//        vc.user = self.contactList.contacts[indexPath.row]
-//        vc.contacts = self.contactList.contacts
-//        self.navigationController?.pushViewController(vc, animated: true)
+        vc.user = self.contactList.contacts[indexPath.row]
+        vc.contacts = self.contactList.contacts
+        contactVC?.navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -67,34 +79,4 @@ extension ContactListViewModel: UITableViewDelegate
         return self.items[indexPath.section].cellSize
     }
 }
-
-
-class ContactViewModelInfo: ContactItem {
-    var type: ContactType
-    {
-        return .info
-    }
-    
-    var rowCount: Int
-    {
-        return 1
-    }
-    
-    var headerSize: CGFloat
-    {
-        return 0
-    }
-    
-    var cellSize: CGFloat
-    {
-        return 80
-    }
-    
-    var contacts: [Contact]
-
-    init(contacts: [Contact]) {
-        self.contacts = contacts
-    }
-}
-
 

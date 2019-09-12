@@ -14,10 +14,6 @@ class ContactListVM {
     var fm = FileManager()
 
     func getData() {
-        if self.contacts.count > 0 {
-            self.contacts.removeAll()
-        }
-        
         guard let mainURL = Bundle.main.url(forResource:"data", withExtension:".json") else { return }
         do {
             let documentDirectory = try fm.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
@@ -30,15 +26,12 @@ class ContactListVM {
     
     func loadFile(path: URL, subPath: URL) {
         if fm.fileExists(atPath: subPath.path) {
-            print("get data")
             decodeJSONData(pathName: subPath)
             
             if contacts.isEmpty {
-                print("is empty")
                 decodeJSONData(pathName: path)
             }
         } else {
-            print("not exist")
             decodeJSONData(pathName: path)
         }
     }
@@ -49,19 +42,12 @@ class ContactListVM {
             if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [[String:Any]]
             {
                 for j in json {
-                    let user = Contact()
-                    user.phone = j["phone"] as? String
-                    user.id = j["id"] as? String
-                    user.firstName = j["firstName"] as? String
-                    user.lastName = j["lastName"] as? String
-                    user.email = j["email"] as? String
-                    
+                    let user = Contact(j: j)
                     self.contacts.append(user)
                 }
             }
         } catch {
             print(error)
         }
-        
     }
 }

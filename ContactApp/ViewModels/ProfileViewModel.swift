@@ -26,42 +26,56 @@ protocol ProfileItem {
 class ProfileViewModel: NSObject {
     
     var items = [ProfileItem]()
-    var profileInfo = [ProfileFormVM]()
     var fm = FileManager()
     
-    init(contact: Contact) {
+    var firstName: String? = ""
+    var lastName: String? = ""
+    var email: String? = ""
+    var phone: String? = ""
+    var contact: Contact?
+    
+    
+    init(contact: Contact?) {
         super.init()
-
+        self.contact = contact
+        
         let modelPicture = ProfileViewModelPicture()
         
-        
         let firstName = ProfileFormVM(title: "First Name", placeholder: "Enter your firstname")
-        firstName.value = contact.firstName
+        firstName.value = contact?.firstName
         firstName.tag = 100
-        firstName.valueCompletion = {[weak firstName] value in
+        self.firstName = contact?.firstName
+        firstName.valueCompletion = {[weak self, weak firstName] value in
+            self?.firstName = value
             firstName?.value = value
         }
         
         let lastName = ProfileFormVM(title: "Last Name", placeholder: "Enter your lastname")
-        lastName.value = contact.lastName
+        lastName.value = contact?.lastName
         lastName.tag = 101
-        lastName.valueCompletion = {[weak lastName] value in
+        self.lastName = contact?.lastName
+        lastName.valueCompletion = {[weak self, weak lastName] value in
+            self?.lastName = value
             lastName?.value = value
         }
         
         let mainInfo = [firstName, lastName]
         
         let email = ProfileFormVM(title: "Email", placeholder: "Enter your email")
-        email.value = contact.email
+        email.value = contact?.email
         email.tag = 102
-        email.valueCompletion = {[weak email] value in
+        self.email = contact?.email
+        email.valueCompletion = {[weak self, weak email] value in
+            self?.email = value
             email?.value = value
         }
         
         let phone = ProfileFormVM(title: "Phone", placeholder: "Enter your phone")
-        phone.value = contact.phone
+        phone.value = contact?.phone
         phone.tag = 103
-        phone.valueCompletion = {[weak phone] value in
+        self.phone = contact?.phone
+        phone.valueCompletion = {[weak self, weak phone] value in
+            self?.phone = value
             phone?.value = value
         }
         let subInfo = [email, phone]
@@ -71,27 +85,46 @@ class ProfileViewModel: NSObject {
         let modelSubInfo = ProfileViewModelSubInfo(info: subInfo)
 
         self.items = [modelPicture, modelMainInfo, modelSubInfo]
-        
-        self.profileInfo = mainInfo + subInfo
-        
     }
     
-    @discardableResult
-    func isValid() -> (Bool, Array<String>?) {
-        var isValid = true
-        var value = [String]()
-        
-        for i in self.profileInfo {
-            if let item = i.value {
-                i.checkValidity()
-                if !i.isValid {
-                    isValid = false
-                }
-                value.append(item)
+    func isValid(callback: (Bool, Contact?) -> Void) {
+        if let firstName = firstName, let lastName = lastName {
+            if firstName.isEmpty || lastName.isEmpty {
+                callback(false,nil)
+            } else {
+                let c = Contact()
+                c.firstName = firstName
+                c.lastName = lastName
+                c.email = email
+                c.phone = phone
+                callback(true,c)
             }
-            print(value)
+        } else {
+            callback(false, nil)
         }
-        return (isValid, value)
+    }
+    
+    func saveNewData(contacts: [Contact], callback: (Bool) -> Void) {
+        isValid { (isValid, c) in
+            if isValid {
+                var newContacts = [Contact]()
+                for contact in contacts {
+                    if (self.contact?.id == contact.id) {
+                        if let value = c {
+                            contact.firstName = value.firstName
+                            contact.lastName = value.lastName
+                            contact.email = value.email
+                            contact.phone = value.phone
+                        }
+                    }
+                    newContacts.append(contact)
+                }
+                writeToFile(encodeFile: newContacts)
+                callback(true)
+            } else {
+                callback(false)
+            }
+        }
     }
     
     func writeToFile(encodeFile: Array<Contact>) {
@@ -107,7 +140,6 @@ class ProfileViewModel: NSObject {
         }
     }
 }
-
 
 extension ProfileViewModel: UITableViewDataSource, UITableViewDelegate
 {
@@ -160,104 +192,5 @@ extension ProfileViewModel: UITableViewDataSource, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return self.items[indexPath.section].cellSize
-    }
-}
-
-
-class ProfileViewModelPicture: ProfileItem {
-    var type: ProfileItemType
-    {
-        return .picture
-    }
-    
-    var sectionTitle: String
-    {
-        return ""
-    }
-    
-    var rowCount: Int
-    {
-        return 1
-    }
-    
-    var headerSize: CGFloat
-    {
-        return 0
-    }
-    
-    var cellSize: CGFloat
-    {
-        return 150
-    }
-    
-    init() {
-        
-    }
-}
-
-
-class ProfileViewModelMainInfo: ProfileItem {
-    var type: ProfileItemType
-    {
-        return .mainInformation
-    }
-    
-    var sectionTitle: String
-    {
-        return "Main Information"
-    }
-    
-    var rowCount: Int
-    {
-        return info.count
-    }
-    
-    var headerSize: CGFloat
-    {
-        return UITableView.automaticDimension
-    }
-    
-    var cellSize: CGFloat
-    {
-        return UITableView.automaticDimension
-    }
-    
-    var info: [ProfileFormVM]
-    
-    init(info: [ProfileFormVM]) {
-        self.info = info
-    }
-}
-
-class ProfileViewModelSubInfo: ProfileItem {
-    var type: ProfileItemType
-    {
-        return .subInformation
-    }
-    
-    var sectionTitle: String
-    {
-        return "Sub Information"
-    }
-    
-    var rowCount: Int
-    {
-        return info.count
-    }
-    
-    var headerSize: CGFloat
-    {
-        return UITableView.automaticDimension
-    }
-    
-    var cellSize: CGFloat
-    {
-        return UITableView.automaticDimension
-    }
-    
-    var info: [ProfileFormVM]
-    
-    init(info: [ProfileFormVM]) {
-        self.info = info
     }
 }

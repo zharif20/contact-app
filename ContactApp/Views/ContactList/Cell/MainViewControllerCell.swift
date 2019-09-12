@@ -13,6 +13,16 @@ class MainViewControllerCell: UITableViewCell {
     @IBOutlet weak var profileIconView: UIView!
     @IBOutlet weak var profileNameLabel: UILabel!
     
+    var item: Contact?
+    {
+        didSet {
+            guard let item = item else { return }
+            if let firstName = item.firstName, let lastName = item.lastName {
+                profileNameLabel.text = "\(firstName) \(lastName)"
+            }
+        }
+    }
+    
     static var nib:UINib {
         return UINib(nibName: identifier, bundle: nil)
     }
@@ -36,7 +46,6 @@ class MainViewControllerCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
-        // Configure the view for the selected state
     }
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
